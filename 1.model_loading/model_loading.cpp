@@ -14,7 +14,8 @@
 #include "VAO.h"
 #include "VBO.h"
 #include "EBO.h"
-#include "Polygon.h"
+#include "Polygon/Polygon.h"
+#include "Interface//Interface.h"
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 
@@ -39,6 +40,8 @@ float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
 GLfloat v[] = {33, 33, 33, 33};
+glm::mat4 model = glm::mat4(1.0f);
+float degree = 180.0;
 
 int main() {
     // glfw: initialize and configure
@@ -102,7 +105,8 @@ int main() {
 
     // render loop
     // -----------
-    Polygon polygon(vertices, sizeof(vertices), FileSystem::getPath("resources/textures/bricks2_disp.jpg").c_str());
+    Interface interface;
+    Polygon polygon(vertices, sizeof(vertices), FileSystem::getPath("resources/textures/bricks2.jpg").c_str());
     while (!glfwWindowShouldClose(window)) {
         // per-frame time logic
         // --------------------
@@ -130,17 +134,21 @@ int main() {
         ourShader.setMat4("view", view);
 
         // render the loaded model
-        glm::mat4 model = glm::mat4(1.0f);
+        glm::vec3 cameraFrontOffset = camera.Position + camera.Front * 2.0f;
+        model = glm::mat4(1.0f);
         model = glm::translate(model,
-                               glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
-        model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));    // it's a bit too big for our scene, so scale it down
+                               glm::vec3(cameraFrontOffset.x, cameraFrontOffset.y - 0.7, cameraFrontOffset.z + 0.1));
+        model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
+        model = glm::rotate(model, glm::radians(degree), glm::vec3(0.0f, 1.0f, 0.0f));
         ourShader.setMat4("model", model);
         ourModel.Draw(ourShader);
+
+        model = glm::mat4(1.0f);
         model = glm::translate(model,
                                glm::vec3(3.0f, 1.0f, 0.0f)); // translate it down so it's at the center of the scene
-        ourShader.setMat4("model", model);
-       polygon.Bind(projection,view,model);
 
+
+        interface.Draw(camera);
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
@@ -156,17 +164,64 @@ int main() {
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
 // ---------------------------------------------------------------------------------------------------------
 void processInput(GLFWwindow *window) {
+
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_A) != GLFW_PRESS && glfwGetKey(window, GLFW_KEY_S) != GLFW_PRESS &&
+        glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_D) != GLFW_PRESS) {
         camera.ProcessKeyboard(FORWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        degree = 180.0;
+    }
+    if (glfwGetKey(window, GLFW_KEY_A) != GLFW_PRESS && glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS &&
+        glfwGetKey(window, GLFW_KEY_W) != GLFW_PRESS && glfwGetKey(window, GLFW_KEY_D) != GLFW_PRESS) {
         camera.ProcessKeyboard(BACKWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        degree = 0.0;
+
+    }
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_S) != GLFW_PRESS &&
+        glfwGetKey(window, GLFW_KEY_W) != GLFW_PRESS && glfwGetKey(window, GLFW_KEY_D) != GLFW_PRESS) {
         camera.ProcessKeyboard(LEFT, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        degree = -90.0;
+
+    }
+    if (glfwGetKey(window, GLFW_KEY_A) != GLFW_PRESS && glfwGetKey(window, GLFW_KEY_S) != GLFW_PRESS &&
+        glfwGetKey(window, GLFW_KEY_W) != GLFW_PRESS && glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
         camera.ProcessKeyboard(RIGHT, deltaTime);
+        degree = 90.0;
+    }
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_S) != GLFW_PRESS &&
+        glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_D) != GLFW_PRESS) {
+        camera.ProcessKeyboard(LEFT, deltaTime);
+        camera.ProcessKeyboard(FORWARD, deltaTime);
+
+        degree = -135.0;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_A) != GLFW_PRESS && glfwGetKey(window, GLFW_KEY_S) != GLFW_PRESS &&
+        glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+        camera.ProcessKeyboard(RIGHT, deltaTime);
+        camera.ProcessKeyboard(FORWARD, deltaTime);
+
+        degree = 135.0;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS && glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS &&
+        glfwGetKey(window, GLFW_KEY_W) != GLFW_PRESS && glfwGetKey(window, GLFW_KEY_D) != GLFW_PRESS) {
+        camera.ProcessKeyboard(LEFT, deltaTime);
+        camera.ProcessKeyboard(BACKWARD, deltaTime);
+
+        degree = -45.0;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_A) != GLFW_PRESS && glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS &&
+        glfwGetKey(window, GLFW_KEY_W) != GLFW_PRESS && glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+        camera.ProcessKeyboard(RIGHT, deltaTime);
+        camera.ProcessKeyboard(BACKWARD, deltaTime);
+        degree = 45.0;
+    }
+
+
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes

@@ -2,28 +2,20 @@
 #include <iostream>
 
 Tex::Tex(const char* image, GLenum texType, GLenum slot, GLenum format, GLenum pixelType) {
-    // تعيين نوع الـ Texture
     type = texType;
 
-    // تخزين أبعاد الصورة وعدد القنوات
     int widthImg, heightImg, numColCh;
-    // قلب الصورة عموديًا لجعلها تظهر بشكل صحيح
     stbi_set_flip_vertically_on_load(true);
-    // تحميل الصورة من الملف
     unsigned char* bytes = stbi_load(image, &widthImg, &heightImg, &numColCh, 0);
 
     if (bytes) {
-        // تحديد التنسيق تلقائيًا بناءً على عدد القنوات
         if (numColCh == 1) {
             format = GL_RED;
-            std::cout<<"GL_RED";
         } else if (numColCh == 3) {
             format = GL_RGB;
-            std::cout<<"GL_RGB";
 
         } else if (numColCh == 4) {
             format = GL_RGBA;
-            std::cout<<"GL_RGBA";
 
         } else {
             std::cerr << "Unsupported number of channels: " << numColCh << std::endl;
@@ -73,3 +65,4 @@ void Tex::Unbind() {
 void Tex::Delete() {
     glDeleteTextures(1, &ID);
 }
+
