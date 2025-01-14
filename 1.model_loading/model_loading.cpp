@@ -14,8 +14,6 @@
 #include "VAO.h"
 #include "VBO.h"
 #include "EBO.h"
-#include "Polygon/Polygon.h"
-#include "Interface//Interface.h"
 #include "MallBuilder/MallBuilder.h"
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
@@ -106,8 +104,6 @@ int main() {
 
     // render loop
     // -----------
-    Interface interface;
-    Polygon polygon(vertices, sizeof(vertices), FileSystem::getPath("resources/textures/bricks2.jpg").c_str());
     MallBuilder Mall;
     while (!glfwWindowShouldClose(window)) {
         // per-frame time logic

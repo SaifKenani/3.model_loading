@@ -506,7 +506,7 @@ private:
         GLfloat wallRight[] = {
                 // positions          // colors           // texture coords
                 4.0f, 3.0f, -10.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
-                4.0f, -1.0f, -13.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                4.0f, -1.0f, -10.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
                 4.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
                 4.0f, 3.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
         };
