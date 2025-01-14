@@ -238,9 +238,6 @@ public:
         this->draw(VAOCenter, textureCenter, modelBase, camera);
         this->draw(VAOCenterBack, textureBack, modelBase, camera);
 
-        this->draw(VAODoor, textureDoor, modelBase, camera);
-        this->draw(VAODoorBack, textureBack, modelBase, camera);
-
         this->draw(VAOTop, textureTop, modelBase, camera);
         this->draw(VAOTopBack, textureBack, modelBase, camera);
 
@@ -260,6 +257,13 @@ public:
         this->draw(VAODown, textureDown, modelBase, camera);
         this->draw(VAODownBack, textureBack, modelBase, camera);
 
+
+        this->draw(VAODoor, textureDoor, modelBase, camera);
+        this->draw(VAODoorBack, textureBack, modelBase, camera);
+        glm::mat4 model=modelBase;
+        model = glm::translate(model, glm::vec3(-3.37, 0.0, 0.0));
+        this->draw(VAODoor, textureDoor, model, camera);
+        this->draw(VAODoorBack, textureBack, model, camera);
 
 //        this->draw(VAODownBack, textureBack, modelBase, camera);
 
@@ -296,88 +300,90 @@ private:
     void setVAO() {
         GLfloat right[] = {
                 // positions          // colors           // texture coords
-                4.0f, 2.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
-                4.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
-                0.3f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
-                0.3f, 2.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+                8.0f, 4.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                8.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                1.0f, 4.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
         };
 
 
         GLfloat left[] = {
                 // positions          // colors           // texture coords
-                -0.3f, 2.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
-                -0.3f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
-                -4.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
-                -4.0f, 2.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+                -1.0f, 4.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                -1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                -8.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                -8.0f, 4.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
         };
 
 
         GLfloat center[] = {
                 // positions          // colors           // texture coords
-                0.3f, 2.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
-                0.3f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
-                -0.3f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
-                -0.3f, 2.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+                1.0f, 4.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                -1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                -1.0f, 4.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
         };
 
 
         GLfloat door[] = {
                 // positions          // colors           // texture coords
-                0.3f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
-                0.3f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
-                -0.3f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
-                -0.3f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+                1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                1.0f, -1.f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                -0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                -0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
         };
+
+
 
         GLfloat top[] = {
                 // positions          // colors           // texture coords
-                4.0f, 10.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
-                4.0f, 2.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
-                -4.0f, 2.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
-                -4.0f, 10.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+                8.0f, 15.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                8.0f, 4.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                -8.0f, 4.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                -8.0f, 15.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
         };
 
 
         GLfloat wallRight[] = {
                 // positions          // colors           // texture coords
-                4.0f, 10.0f, -15.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
-                4.0f, -1.0f, -15.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
-                4.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
-                4.0f, 10.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+                8.0f, 15.0f, -20.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                8.0f, -1.0f, -20.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                8.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                8.0f, 15.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
         };
 
 
         GLfloat wallLeft[] = {
                 // positions          // colors           // texture coords
-                -4.0f, 10.0f, -15.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
-                -4.0f, -1.0f, -15.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
-                -4.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
-                -4.0f, 10.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+                -8.0f, 15.0f, -20.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                -8.0f, -1.0f, -20.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                -8.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                -8.0f, 15.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
         };
 
 
         GLfloat back[] = {
                 // positions          // colors           // texture coords
-                4.0f, 10.0f, -15.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
-                4.0f, -1.0f, -15.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
-                -4.0f, -1.0f, -15.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
-                -4.0f, 10.0f, -15.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+                8.0f, 15.0f, -20.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                8.0f, -1.0f, -20.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                -8.0f, -1.0f, -20.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                -8.0f, 15.0f, -20.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
         };
 
         GLfloat up[] = {
                 // positions          // colors           // texture coords
-                4.0f, 10.0f, -15.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
-                4.0f, 10.0f, -0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
-                -4.0f, 10.0f, -0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
-                -4.0f, 10.0f, -15.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+                8.0f, 15.0f, -20.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                8.0f, 15.0f, -0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                -8.0f, 15.0f, -0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                -8.0f, 15.0f, -20.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
         };
 
         GLfloat down[] = {
                 // positions          // colors           // texture coords
-                4.0f, -1.0f, -15.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
-                4.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
-                -4.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
-                -4.0f, -1.0f, -15.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+                8.0f, -1.0f, -20.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                8.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                -8.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                -8.0f, -1.0f, -20.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
         };
         GLfloat street[] = {
                 // positions          // colors           // texture coords
@@ -505,8 +511,8 @@ private:
     void setStore1() {
         GLfloat wallRight[] = {
                 // positions          // colors           // texture coords
-                4.0f, 3.0f, -10.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
-                4.0f, -1.0f, -10.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                4.0f, 3.0f, -8.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                4.0f, -1.0f, -8.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
                 4.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
                 4.0f, 3.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
         };
