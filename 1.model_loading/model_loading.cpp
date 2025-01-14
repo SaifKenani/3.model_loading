@@ -16,6 +16,7 @@
 #include "EBO.h"
 #include "Polygon/Polygon.h"
 #include "Interface//Interface.h"
+#include "MallBuilder/MallBuilder.h"
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 
@@ -107,10 +108,11 @@ int main() {
     // -----------
     Interface interface;
     Polygon polygon(vertices, sizeof(vertices), FileSystem::getPath("resources/textures/bricks2.jpg").c_str());
+    MallBuilder m;
     while (!glfwWindowShouldClose(window)) {
         // per-frame time logic
         // --------------------
-        float currentFrame = static_cast<float>(glfwGetTime());
+        float currentFrame = static_cast<float>(glfwGetTime())*10;
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
@@ -141,14 +143,25 @@ int main() {
         model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
         model = glm::rotate(model, glm::radians(degree), glm::vec3(0.0f, 1.0f, 0.0f));
         ourShader.setMat4("model", model);
-        ourModel.Draw(ourShader);
+//        ourModel.Draw(ourShader);
 
         model = glm::mat4(1.0f);
-        model = glm::translate(model,
-                               glm::vec3(3.0f, 1.0f, 0.0f)); // translate it down so it's at the center of the scene
+        model = glm::translate(model,glm::vec3( 0.0,-2.0,-20.0));
+        model = glm::rotate(model, glm::radians(180.0f), glm::vec3(1.0f, 0.0f,0.0f));
 
 
-        interface.Draw(camera);
+//        interface.DrawRightAndLeft(camera,model);
+        model = glm::translate(model,glm::vec3( 0.0,3.3,-5.3));
+
+//        interface.DrawWithDoor(camera,model);
+        model = glm::mat4(1.0f);
+        model = glm::translate(model,glm::vec3( 20.0,0.0,-50.0));
+        model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f,1.0f,0.0f));
+
+
+        // interface.DrawWithDoor(camera,model);
+       m.DrowInterface(camera,model);
+
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);

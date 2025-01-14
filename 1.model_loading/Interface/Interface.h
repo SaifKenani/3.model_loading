@@ -41,28 +41,51 @@ class Interface : public Polygon {
 public:
     Interface() {
         polygon = new Polygon(vertices, sizeof(vertices),
-                              FileSystem::getPath("resources/textures/bricks2.jpg").c_str());
+                              FileSystem::getPath("resources/textures/brickwall_normal.jpg").c_str());
 
 
     }
 
-    void Draw(Camera camera) {
+    void DrawRightAndLeft(Camera camera, glm::mat4 baseModel) {
         float width = 0.6f;
         float height = 0.6f;
-        int rows = 30;
-        int cols = 30;
+        int rows = 20;
+        int cols = 20;
+
 
         for (int row = 0; row < rows; row++) {
-
             for (int col = 0; col < cols; col++) {
-                if (col == 14 || col == 15 || col == 16)
-                    if (row == 14 ){}
                 glm::mat4 model = glm::mat4(1.0f);
-                model = glm::translate(model, glm::vec3(col * width, row * height, -15.0f)); // ضبط المواقع
+
+                model = glm::translate(baseModel, glm::vec3(col * width, (row * height - 4.0f), -1.0f)); // ضبط المواقع
+
                 polygon->Drow(camera, model);
             }
         }
     }
+
+
+    void DrawWithDoor(Camera camera, glm::mat4 baseModel) {
+
+        glm::mat4 model=glm::mat4 (1.0);
+        model = glm::scale(model, glm::vec3(25.0f, 50.0f, 1.0f));
+        model=model*baseModel;
+
+        polygon->Drow(camera,model);
+
+        model = glm::translate(model,glm::vec3( -1.0,0.0,0.0));
+        polygon->Drow(camera,model);
+
+
+        model=glm::mat4 (1.0);
+        model = glm::scale(model, glm::vec3(17.0f, 30.0f, 1.0f));
+        model=model*baseModel;
+        polygon->Drow(camera,model);
+
+
+
+    }
+
 
 public:
 
