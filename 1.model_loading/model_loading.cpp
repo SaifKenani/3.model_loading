@@ -108,11 +108,11 @@ int main() {
     // -----------
     Interface interface;
     Polygon polygon(vertices, sizeof(vertices), FileSystem::getPath("resources/textures/bricks2.jpg").c_str());
-    MallBuilder m;
+    MallBuilder Mall;
     while (!glfwWindowShouldClose(window)) {
         // per-frame time logic
         // --------------------
-        float currentFrame = static_cast<float>(glfwGetTime())*10;
+        float currentFrame = static_cast<float>(glfwGetTime()) * 10;
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
@@ -146,22 +146,31 @@ int main() {
 //        ourModel.Draw(ourShader);
 
         model = glm::mat4(1.0f);
-        model = glm::translate(model,glm::vec3( 0.0,-2.0,-20.0));
-        model = glm::rotate(model, glm::radians(180.0f), glm::vec3(1.0f, 0.0f,0.0f));
+        model = glm::translate(model, glm::vec3(0.0, -2.0, -20.0));
+        model = glm::rotate(model, glm::radians(180.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 
 
 //        interface.DrawRightAndLeft(camera,model);
-        model = glm::translate(model,glm::vec3( 0.0,3.3,-5.3));
+        model = glm::translate(model, glm::vec3(0.0, 3.3, -5.3));
 
 //        interface.DrawWithDoor(camera,model);
         model = glm::mat4(1.0f);
-        model = glm::translate(model,glm::vec3( 20.0,0.0,-50.0));
-        model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(0.0f,1.0f,0.0f));
+//        model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+
+    Mall.DrowInterface(camera, model);
+        model = glm::mat4(1.0f);
+//        model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+
+        Mall.drawCutter(camera, model);
 
 
-        // interface.DrawWithDoor(camera,model);
-       m.DrowInterface(camera,model);
+        {
+            model = glm::mat4(1.0f);
+            model = glm::rotate(model, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+            model = glm::translate(model, glm::vec3(0.0, 16.6, 3.3));
 
+            Mall.drawStreet(camera, model);
+        }
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);

@@ -23,6 +23,7 @@ using namespace std;
 
 class MallBuilder {
 public:
+    string TEXTUREBACK;
 
     //for Front
     GLuint VBORight, VAORight, VBORightBack, VAORightBack, EBO;
@@ -42,189 +43,27 @@ public:
     GLuint VAOUp, VAOUpBack, VBOUp, VBOUpBack, textureUp;
     GLuint VAODown, VAODownBack, VBODown, VBODownBack, textureDown;
 
+    // Street
+    GLuint VAOStreet, VBOStreet, textureStreet;
+    GLuint VAOGrass, VBOGrass, textureGrass;
+// Cutter
+    GLuint VAOCutter1Right, VBOCutter1Right, textureCutter1Right;
+    GLuint VAOCutter2Right, VBOCutter2Right, textureCutter2Right;
+    GLuint VAOCutter1Left, VBOCutter1Left, textureCutter1Left;
+    GLuint VAOCutter2Left, VBOCutter2Left, textureCutter2Left;
+
+
     constexpr static const unsigned int indices[6] = {
             0, 1, 3, // first triangle
             1, 2, 3  // second triangle
     };
 
     MallBuilder() {
-        stbi_set_flip_vertically_on_load(true);
-
-        GLfloat right[] = {
-                // positions          // colors           // texture coords
-                4.0f, 2.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
-                4.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
-                0.3f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
-                0.3f, 2.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
-        };
-
-
-        GLfloat left[] = {
-                // positions          // colors           // texture coords
-                -0.3f, 2.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
-                -0.3f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
-                -4.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
-                -4.0f, 2.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
-        };
-
-
-        GLfloat center[] = {
-                // positions          // colors           // texture coords
-                0.3f, 2.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
-                0.3f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
-                -0.3f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
-                -0.3f, 2.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
-        };
-
-
-        GLfloat door[] = {
-                // positions          // colors           // texture coords
-                0.3f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
-                0.3f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
-                -0.3f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
-                -0.3f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
-        };
-
-        GLfloat top[] = {
-                // positions          // colors           // texture coords
-                4.0f, 5.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
-                4.0f, 2.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
-                -4.0f, 2.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
-                -4.0f, 5.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
-        };
-
-
-        GLfloat wallRight[] = {
-                // positions          // colors           // texture coords
-                4.0f, 5.0f, -6.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
-                4.0f, -1.0f, -6.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
-                4.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
-                4.0f, 5.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
-        };
-
-
-        GLfloat wallLeft[] = {
-                // positions          // colors           // texture coords
-                -4.0f, 5.0f, -6.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
-                -4.0f, -1.0f, -6.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
-                -4.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
-                -4.0f, 5.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
-        };
-
-
-        GLfloat back[] = {
-                // positions          // colors           // texture coords
-                4.0f, 5.0f, -6.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
-                4.0f, -1.0f, -6.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
-                -4.0f, -1.0f, -6.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
-                -4.0f, 5.0f, -6.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
-        };
-
-        GLfloat up[] = {
-                // positions          // colors           // texture coords
-                4.0f, 5.0f, -6.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
-                4.0f, 5.0f, -0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
-                -4.0f, 5.0f, -0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
-                -4.0f, 5.0f, -6.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
-        };
-
-        GLfloat down[] = {
-                // positions          // colors           // texture coords
-                4.0f, -1.0f, -6.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
-                4.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
-                -4.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
-                -4.0f, -1.0f, -6.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
-        };
-
-
-        build(VAORight, VAORightBack, VBORight, VBORightBack, EBO, textureRight, right, sizeof(right),
-              FileSystem::getPath("src/3.model_loading/images/right.png").c_str(),
-              FileSystem::getPath("resources/textures/block.png").c_str(), "front");
-
-        build(VAOLeft, VAOLeftBack, VBOLeft, VBOLeftBack, EBO, textureLeft, left, sizeof(left),
-              FileSystem::getPath("src/3.model_loading/images/right.png").c_str(),
-              FileSystem::getPath("resources/textures/block.png").c_str(), "front");
-
-        build(VAOCenter, VAOCenterBack, VBOCenter, VBOCenterBack, EBO, textureCenter, center, sizeof(center),
-              FileSystem::getPath("src/3.model_loading/images/center.png").c_str(),
-              FileSystem::getPath("resources/textures/block.png").c_str(), "front");
-
-        build(VAODoor, VAODoorBack, VBODoor, VBODoorBack, EBO, textureDoor, door, sizeof(top),
-              FileSystem::getPath("src/3.model_loading/images/photo_2024-12-04_10-51-1ddd5.jpg").c_str(),
-              FileSystem::getPath("resources/textures/block.png").c_str(), "front");
-
-        build(VAOTop, VAOTopBack, VBOTop, VBOTopBack, EBO, textureTop, top, sizeof(top),
-              FileSystem::getPath("src/3.model_loading/images/photo_2024-12-04_10-51-1ddd5.jpg").c_str(),
-              FileSystem::getPath("resources/textures/block.png").c_str(), "front");
-
-        build(VAOWallRight, VAOWallRightBack, VBOWallRight, VBOWallRightBack, EBO, textureWallRight, wallRight,
-              sizeof(wallRight),
-              FileSystem::getPath("src/3.model_loading/images/photo_2024-12-04_10-51-1ddd5.jpg").c_str(),
-              FileSystem::getPath("resources/textures/block.png").c_str(), "right");
-
-        build(VAOWallLeft, VAOWallLeftBack, VBOWallLeft, VBOWallLeftBack, EBO, textureWallLeft, wallLeft,
-              sizeof(wallLeft),
-              FileSystem::getPath("src/3.model_loading/images/photo_2024-12-04_10-51-1ddd5.jpg").c_str(),
-              FileSystem::getPath("resources/textures/block.png").c_str(), "left");
-
-        build(VAOBack, VAOBackBack, VBOBack, VBOBackBack, EBO, textureBackBack, back,
-              sizeof(wallLeft),
-              FileSystem::getPath("src/3.model_loading/images/photo_2024-12-04_10-51-1ddd5.jpg").c_str(),
-              FileSystem::getPath("resources/textures/block.png").c_str(), "back");
-
-        build(VAOUp, VAOUpBack, VBOUp, VBOUpBack, EBO, textureUp, up,
-              sizeof(wallLeft),
-              FileSystem::getPath("src/3.model_loading/images/photo_2024-12-04_10-51-1ddd5.jpg").c_str(),
-              FileSystem::getPath("resources/textures/block.png").c_str(), "up");
-
-
-        build(VAODown, VAODownBack, VBODown, VBODownBack, EBO, textureDown, down,
-              sizeof(wallLeft),
-              FileSystem::getPath("src/3.model_loading/images/photo_2024-12-04_10-51-1ddd5.jpg").c_str(),
-              FileSystem::getPath("resources/textures/block.png").c_str(), "down");
-
-
+        TEXTUREBACK = "resources/textures/wood.png";
+        setVAO();
+        setStore1();
     }
 
-    void DrowInterface(Camera camera, glm::mat4 modelBase) {
-
-
-        this->drow(VAORight, textureRight, modelBase, camera);
-        this->drow(VAORightBack, textureBack, modelBase, camera);
-
-        this->drow(VAOLeft, textureLeft, modelBase, camera);
-        this->drow(VAOLeftBack, textureBack, modelBase, camera);
-
-        this->drow(VAOCenter, textureCenter, modelBase, camera);
-        this->drow(VAOCenterBack, textureBack, modelBase, camera);
-
-        this->drow(VAODoor, textureDoor, modelBase, camera);
-        this->drow(VAODoorBack, textureBack, modelBase, camera);
-
-        this->drow(VAOTop, textureTop, modelBase, camera);
-        this->drow(VAOTopBack, textureBack, modelBase, camera);
-
-        this->drow(VAOWallRight, textureWallRight, modelBase, camera);
-        this->drow(VAOWallRightBack, textureBack, modelBase, camera);
-
-        this->drow(VAOWallLeft, textureWallLeft, modelBase, camera);
-        this->drow(VAOWallLeftBack, textureBack, modelBase, camera);
-
-        this->drow(VAOBack, textureBackBack, modelBase, camera);
-        this->drow(VAOBackBack, textureBack, modelBase, camera);
-
-        this->drow(VAOUp, textureUp, modelBase, camera);
-        this->drow(VAOUpBack, textureBack, modelBase, camera);
-
-
-        this->drow(VAODown, textureDown, modelBase, camera);
-        this->drow(VAODownBack, textureBack, modelBase, camera);
-
-    }
-
-    void draw2Wall() {
-
-    }
 
     void
     build(GLuint &VAO, GLuint &VAOBack, GLuint &VBO, GLuint &VBOBack, GLuint &EBO, GLuint &texture,
@@ -304,12 +143,12 @@ public:
             array[8] -= 0.01f;
             array[16] -= 0.01f;
             array[24] -= 0.01f;
-        }else if (place == "up") {
+        } else if (place == "up") {
             array[1] -= 0.01f;
             array[9] -= 0.01f;
             array[17] -= 0.01f;
             array[25] -= 0.01f;
-        }else if (place == "down") {
+        } else if (place == "down") {
             array[1] += 0.01f;
             array[9] += 0.01f;
             array[17] += 0.01f;
@@ -365,7 +204,7 @@ public:
 
     }
 
-    void drow(unsigned int &VAO, unsigned int &texture, glm::mat4 modelBase, Camera camera) {
+    void draw(unsigned int &VAO, unsigned int &texture, glm::mat4 modelBase, Camera camera) {
 
         Shader ourShader(FileSystem::getPath("src/1.getting_started/7.4.camera_class/7.4.camera.vs").c_str(),
                          FileSystem::getPath("src/1.getting_started/7.4.camera_class/7.4.camera.fs").c_str());
@@ -386,6 +225,298 @@ public:
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     }
 
+
+    void DrowInterface(Camera camera, glm::mat4 modelBase) {
+
+
+        this->draw(VAORight, textureRight, modelBase, camera);
+        this->draw(VAORightBack, textureBack, modelBase, camera);
+
+        this->draw(VAOLeft, textureLeft, modelBase, camera);
+        this->draw(VAOLeftBack, textureBack, modelBase, camera);
+
+        this->draw(VAOCenter, textureCenter, modelBase, camera);
+        this->draw(VAOCenterBack, textureBack, modelBase, camera);
+
+        this->draw(VAODoor, textureDoor, modelBase, camera);
+        this->draw(VAODoorBack, textureBack, modelBase, camera);
+
+        this->draw(VAOTop, textureTop, modelBase, camera);
+        this->draw(VAOTopBack, textureBack, modelBase, camera);
+
+        this->draw(VAOWallRight, textureWallRight, modelBase, camera);
+        this->draw(VAOWallRightBack, textureBack, modelBase, camera);
+
+        this->draw(VAOWallLeft, textureWallLeft, modelBase, camera);
+        this->draw(VAOWallLeftBack, textureBack, modelBase, camera);
+
+        this->draw(VAOBack, textureBackBack, modelBase, camera);
+        this->draw(VAOBackBack, textureBack, modelBase, camera);
+
+        this->draw(VAOUp, textureUp, modelBase, camera);
+        this->draw(VAOUpBack, textureBack, modelBase, camera);
+
+
+        this->draw(VAODown, textureDown, modelBase, camera);
+        this->draw(VAODownBack, textureBack, modelBase, camera);
+
+
+//        this->draw(VAODownBack, textureBack, modelBase, camera);
+
+    }
+
+    void drawStreet(Camera camera, glm::mat4 modelBase) {
+        glm::mat4 model = modelBase;
+        this->draw(VAOStreet, textureStreet, modelBase, camera);
+        model = glm::translate(modelBase, glm::vec3(0.0, 20.0, -0.0));
+        this->draw(VAOStreet, textureStreet, model, camera);
+        model = modelBase;
+        model = glm::translate(modelBase, glm::vec3(0.0, 6.67, -0.0));
+        this->draw(VAOGrass, textureGrass, model, camera);
+
+    }
+
+    void drawCutter(Camera camera, glm::mat4 modelBase) {
+        glm::mat4 model = modelBase;
+        model = glm::translate(modelBase, glm::vec3(-10.0, 0.0, 0.0));
+
+        this->draw(VAOCutter1Right, textureCutter1Right, model, camera);
+
+        model = glm::translate(modelBase, glm::vec3(-17.0, 0.0, 0.0));
+        this->draw(VAOCutter1Right, textureCutter1Right, model, camera);
+
+//        model = glm::translate(modelBase, glm::vec3(0.0, 20.0, -0.0));
+//        this->draw(VAOCutter1Right, textureCutter1Right, model, camera);
+//        model = modelBase;
+//        model = glm::translate(modelBase, glm::vec3(0.0, 6.67, -0.0));
+//        this->draw(VAOGrass, textureGrass, model, camera);
+
+    }
+private:
+    void setVAO() {
+        GLfloat right[] = {
+                // positions          // colors           // texture coords
+                4.0f, 2.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                4.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                0.3f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                0.3f, 2.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+        };
+
+
+        GLfloat left[] = {
+                // positions          // colors           // texture coords
+                -0.3f, 2.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                -0.3f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                -4.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                -4.0f, 2.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+        };
+
+
+        GLfloat center[] = {
+                // positions          // colors           // texture coords
+                0.3f, 2.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                0.3f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                -0.3f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                -0.3f, 2.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+        };
+
+
+        GLfloat door[] = {
+                // positions          // colors           // texture coords
+                0.3f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                0.3f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                -0.3f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                -0.3f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+        };
+
+        GLfloat top[] = {
+                // positions          // colors           // texture coords
+                4.0f, 10.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                4.0f, 2.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                -4.0f, 2.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                -4.0f, 10.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+        };
+
+
+        GLfloat wallRight[] = {
+                // positions          // colors           // texture coords
+                4.0f, 10.0f, -15.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                4.0f, -1.0f, -15.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                4.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                4.0f, 10.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+        };
+
+
+        GLfloat wallLeft[] = {
+                // positions          // colors           // texture coords
+                -4.0f, 10.0f, -15.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                -4.0f, -1.0f, -15.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                -4.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                -4.0f, 10.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+        };
+
+
+        GLfloat back[] = {
+                // positions          // colors           // texture coords
+                4.0f, 10.0f, -15.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                4.0f, -1.0f, -15.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                -4.0f, -1.0f, -15.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                -4.0f, 10.0f, -15.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+        };
+
+        GLfloat up[] = {
+                // positions          // colors           // texture coords
+                4.0f, 10.0f, -15.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                4.0f, 10.0f, -0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                -4.0f, 10.0f, -0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                -4.0f, 10.0f, -15.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+        };
+
+        GLfloat down[] = {
+                // positions          // colors           // texture coords
+                4.0f, -1.0f, -15.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                4.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                -4.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                -4.0f, -1.0f, -15.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+        };
+        GLfloat street[] = {
+                // positions          // colors           // texture coords
+                15.0f, -1.0f, -0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                15.0f, -5.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                -20.0f, -5.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                -20.0f, -1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+        };
+        GLfloat grass[] = {
+                // positions          // colors           // texture coords
+                15.0f, -1.0f, -0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                15.0f, -3.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                -20.0f, -3.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                -20.0f, -1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+        };
+
+
+        build(VAORight, VAORightBack, VBORight, VBORightBack, EBO, textureRight, right, sizeof(right),
+              FileSystem::getPath("src/3.model_loading/images/right.png").c_str(),
+              FileSystem::getPath(TEXTUREBACK).c_str(), "front");
+
+        build(VAOLeft, VAOLeftBack, VBOLeft, VBOLeftBack, EBO, textureLeft, left, sizeof(left),
+              FileSystem::getPath("src/3.model_loading/images/right.png").c_str(),
+              FileSystem::getPath(TEXTUREBACK).c_str(), "front");
+
+        build(VAOCenter, VAOCenterBack, VBOCenter, VBOCenterBack, EBO, textureCenter, center, sizeof(center),
+              FileSystem::getPath("src/3.model_loading/images/center.png").c_str(),
+              FileSystem::getPath(TEXTUREBACK).c_str(), "front");
+
+        build(VAODoor, VAODoorBack, VBODoor, VBODoorBack, EBO, textureDoor, door, sizeof(top),
+              FileSystem::getPath("src/3.model_loading/images/photo_2024-12-04_10-51-1ddd5.jpg").c_str(),
+              FileSystem::getPath(TEXTUREBACK).c_str(), "front");
+
+        build(VAOTop, VAOTopBack, VBOTop, VBOTopBack, EBO, textureTop, top, sizeof(top),
+              FileSystem::getPath("src/3.model_loading/images/photo_2024-12-04_10-51-1ddd5.jpg").c_str(),
+              FileSystem::getPath(TEXTUREBACK).c_str(), "front");
+
+        build(VAOWallRight, VAOWallRightBack, VBOWallRight, VBOWallRightBack, EBO, textureWallRight, wallRight,
+              sizeof(wallRight),
+              FileSystem::getPath("src/3.model_loading/images/photo_2024-12-04_10-51-1ddd5.jpg").c_str(),
+              FileSystem::getPath(TEXTUREBACK).c_str(), "right");
+
+        build(VAOWallLeft, VAOWallLeftBack, VBOWallLeft, VBOWallLeftBack, EBO, textureWallLeft, wallLeft,
+              sizeof(wallLeft),
+              FileSystem::getPath("src/3.model_loading/images/photo_2024-12-04_10-51-1ddd5.jpg").c_str(),
+              FileSystem::getPath(TEXTUREBACK).c_str(), "left");
+
+        build(VAOBack, VAOBackBack, VBOBack, VBOBackBack, EBO, textureBackBack, back,
+              sizeof(wallLeft),
+              FileSystem::getPath("src/3.model_loading/images/photo_2024-12-04_10-51-1ddd5.jpg").c_str(),
+              FileSystem::getPath(TEXTUREBACK).c_str(), "back");
+
+        build(VAOUp, VAOUpBack, VBOUp, VBOUpBack, EBO, textureUp, up,
+              sizeof(wallLeft),
+              FileSystem::getPath("src/3.model_loading/images/photo_2024-12-04_10-51-1ddd5.jpg").c_str(),
+              FileSystem::getPath(TEXTUREBACK).c_str(), "up");
+
+
+        build(VAODown, VAODownBack, VBODown, VBODownBack, EBO, textureDown, down,
+              sizeof(wallLeft),
+              FileSystem::getPath("src/3.model_loading/images/photo_2024-12-04_10-51-1ddd5.jpg").c_str(),
+              FileSystem::getPath(TEXTUREBACK).c_str(), "down");
+
+        setStreet(VAOStreet, VBOStreet, EBO, textureStreet, street,
+                  sizeof(wallLeft),
+                  FileSystem::getPath("resources/textures/street_lr.bmp").c_str());
+
+        setStreet(VAOGrass, VBOGrass, EBO, textureGrass, grass,
+                  sizeof(wallLeft),
+                  FileSystem::getPath("resources/textures/opengl_rt0.bmp").c_str());
+
+
+    }
+
+    void setStreet(GLuint &VAO, GLuint &VBO, GLuint &EBO, GLuint &texture,
+                   GLfloat *array,
+                   GLsizeiptr size, const char *image) {
+
+        glGenVertexArrays(1, &VAO);
+        glGenBuffers(1, &VBO);
+        glGenBuffers(1, &EBO);
+
+        glBindVertexArray(VAO);
+
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glBufferData(GL_ARRAY_BUFFER, size, array, GL_STATIC_DRAW);
+
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+
+        // position attribute
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *) 0);
+        glEnableVertexAttribArray(0);
+        // texture coord attribute
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *) (3 * sizeof(float)));
+        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *) (6 * sizeof(float)));
+        glEnableVertexAttribArray(2);
+
+
+        glGenTextures(1, &texture);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        // set the texture wrapping parameters
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        // set texture filtering parameters
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        // load image, create texture and generate mipmaps
+        int width, height, nrChannels;
+        stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
+        unsigned char *data = stbi_load(
+                image, &width,
+                &height, &nrChannels, 0);
+        if (data) {
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+            glGenerateMipmap(GL_TEXTURE_2D);
+        } else {
+            std::cout << "Failed to load texture" << std::endl;
+        }
+        stbi_image_free(data);
+    }
+
+    void setStore1() {
+        GLfloat wallRight[] = {
+                // positions          // colors           // texture coords
+                4.0f, 3.0f, -10.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                4.0f, -1.0f, -13.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                4.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                4.0f, 3.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+        };
+
+        setStreet(VAOCutter1Right, VBOCutter1Right, EBO, textureCutter1Right, wallRight,
+                  sizeof(wallRight),
+                  FileSystem::getPath("resources/textures/wooden_door.bmp").c_str());
+
+
+    }
 };
 
 
