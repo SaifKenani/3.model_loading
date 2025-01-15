@@ -62,7 +62,7 @@ public:
     };
 
     MallBuilder() {
-        TEXTUREBACK = "resources/textures/wood.png";
+        TEXTUREBACK = "src/3.model_loading/images/wood.png";
         setVAO();
         setCutterAndFloor();
     }
@@ -231,7 +231,6 @@ public:
 
     void DrowInterface(Camera camera, glm::mat4 modelBase) {
 
-        drawCutterAndFloor(camera, modelBase);
         drawStreet(camera, modelBase);
         this->draw(VAORight, textureRight, modelBase, camera);
         this->draw(VAORightBack, textureBack, modelBase, camera);
@@ -271,6 +270,7 @@ public:
     }
 
     void drawStreet(Camera camera, glm::mat4 modelBase) {
+
         glm::mat4 modelHelper = glm::mat4(1.0);
         modelHelper = glm::rotate(modelHelper, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
         modelHelper = glm::translate(modelHelper, glm::vec3(0.0, 16.6, 3.3));
@@ -307,9 +307,9 @@ public:
     }
 
     void drawDoor(Camera camera, glm::mat4 modelBase) {
+        drawCutterAndFloor(camera, modelBase);
+
         glm::mat4 model = modelBase;
-
-
         if (-7 < camera.Position.x && camera.Position.x < 3 && -2.6 < camera.Position.y && camera.Position.y < 3.6 &&
             -7.5 < camera.Position.z && camera.Position.z < 10) {
             model = glm::translate(model, glm::vec3(5.0f, 0.0f, +5.0f));  // نقل إلى الطرف الأيسر
@@ -449,7 +449,7 @@ private:
               FileSystem::getPath(TEXTUREBACK).c_str(), "front");
 
         build(VAODoor, VAODoorBack, VBODoor, VBODoorBack, EBO, textureDoor, door, sizeof(top),
-              FileSystem::getPath("src/3.model_loading/images/Стекло для дверей межкомнатных — Югрос.jpeg").c_str(),
+              FileSystem::getPath("src/3.model_loading/images/blur3.png").c_str(),
               FileSystem::getPath(TEXTUREBACK).c_str(), "front");
 
         build(VAOTop, VAOTopBack, VBOTop, VBOTopBack, EBO, textureTop, top, sizeof(top),
@@ -484,11 +484,11 @@ private:
 
         setStreet(VAOStreet, VBOStreet, EBO, textureStreet, street,
                   sizeof(wallLeft),
-                  FileSystem::getPath("resources/textures/street_lr.bmp").c_str());
+                  FileSystem::getPath("src/3.model_loading/images/street_lr.bmp").c_str());
 
         setStreet(VAOGrass, VBOGrass, EBO, textureGrass, grass,
                   sizeof(wallLeft),
-                  FileSystem::getPath("resources/textures/opengl_rt0.bmp").c_str());
+                  FileSystem::getPath("src/3.model_loading/images/opengl_rt0.bmp").c_str());
 
 
     }
@@ -569,15 +569,15 @@ private:
 
         setStreet(VAOCutter1Right, VBOCutter1Right, EBO, textureCutter1Right, wallRight,
                   sizeof(wallRight),
-                  FileSystem::getPath("resources/textures/wooden_door.bmp").c_str());
+                  FileSystem::getPath("src/3.model_loading/images/blur2.png").c_str());
 
         setStreet(VAOFloor1, VBOFloor1, EBO, textureFloor1, floor1,
                   sizeof(floor1),
-                  FileSystem::getPath("resources/textures/Wood smg.bmp").c_str());
+                  FileSystem::getPath("src/3.model_loading/images/Wood smg.bmp").c_str());
 
         setStreet(VAOFloor2, VBOFloor2, EBO, textureFloor2, floor2,
                   sizeof(floor2),
-                  FileSystem::getPath("resources/textures/Wood smg.bmp").c_str());
+                  FileSystem::getPath("src/3.model_loading/images/Wood smg.bmp").c_str());
 
 
     }

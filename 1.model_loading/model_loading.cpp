@@ -15,6 +15,8 @@
 #include "VBO.h"
 #include "EBO.h"
 #include "MallBuilder/MallBuilder.h"
+#include "SkyBox/SkyBox.h"
+#include "Models/DrawModels.h"
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 
@@ -51,7 +53,7 @@ int main() {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 #ifdef __APPLE__
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    //    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
 
     // glfw window creation
@@ -89,7 +91,9 @@ int main() {
     Shader ourShader("1.model_loading.vs", "1.model_loading.fs");
     // load models
     // -----------
-//    Model ourModel(FileSystem::getPath("resources/objects/dinner_table/scene.gltf"));
+    Model ourModel(FileSystem::getPath("resources/objects/dinner_table/scene.gltf"));
+    Model Table(FileSystem::getPath("resources/objects/simple_dining_table/scene.gltf"));
+DrawModels Models;
     GLfloat vertices[] =
             { //     COORDINATES     /        COLORS      /   TexCoord  //
                     -0.9f, 0.3f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, // Lower left corner
@@ -105,6 +109,7 @@ int main() {
     // render loop
     // -----------
     MallBuilder Mall;
+    SkyBox SkyBox;
     while (!glfwWindowShouldClose(window)) {
         // per-frame time logic
         // --------------------
@@ -140,11 +145,15 @@ int main() {
         model = glm::rotate(model, glm::radians(degree), glm::vec3(0.0f, 1.0f, 0.0f));
         ourShader.setMat4("model", model);
 //        ourModel.Draw(ourShader);
+        model = glm::mat4(1.0f);
+
+        Models.drawTable(camera,model);
+
 
         model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(0.0, -2.0, -20.0));
         model = glm::rotate(model, glm::radians(180.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-
+        SkyBox.drawSkyBox(camera);
 
 //        interface.DrawRightAndLeft(camera,model);
         model = glm::translate(model, glm::vec3(0.0, 3.3, -5.3));
