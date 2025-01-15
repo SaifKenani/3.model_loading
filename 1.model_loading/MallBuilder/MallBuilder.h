@@ -51,6 +51,9 @@ public:
     GLuint VAOCutter2Right, VBOCutter2Right, textureCutter2Right;
     GLuint VAOCutter1Left, VBOCutter1Left, textureCutter1Left;
     GLuint VAOCutter2Left, VBOCutter2Left, textureCutter2Left;
+    //floor
+    GLuint VAOFloor1, VBOFloor1, textureFloor1;
+    GLuint VAOFloor2, VBOFloor2, textureFloor2;
 
 
     constexpr static const unsigned int indices[6] = {
@@ -61,7 +64,7 @@ public:
     MallBuilder() {
         TEXTUREBACK = "resources/textures/wood.png";
         setVAO();
-        setStore1();
+        setCutterAndFloor();
     }
 
 
@@ -228,7 +231,8 @@ public:
 
     void DrowInterface(Camera camera, glm::mat4 modelBase) {
 
-        drawCutter(camera, modelBase);
+        drawCutterAndFloor(camera, modelBase);
+        drawStreet(camera, modelBase);
         this->draw(VAORight, textureRight, modelBase, camera);
         this->draw(VAORightBack, textureBack, modelBase, camera);
 
@@ -260,6 +264,8 @@ public:
 
 
 
+
+
 //        this->draw(VAODownBack, textureBack, modelBase, camera);
 
     }
@@ -278,7 +284,9 @@ public:
 
     }
 
-    void drawCutter(Camera camera, glm::mat4 modelBase) {
+    void drawCutterAndFloor(Camera camera, glm::mat4 modelBase) {
+        this->draw(VAOFloor1, textureFloor1, modelBase, camera);
+        this->draw(VAOFloor2, textureFloor2, modelBase, camera);
         glm::mat4 model = modelBase;
         model = glm::translate(modelBase, glm::vec3(-2.0, 0.0, 0.0));
 
@@ -286,6 +294,9 @@ public:
 
         model = glm::translate(modelBase, glm::vec3(-26.0, 0.0, 0.0));
         this->draw(VAOCutter1Right, textureCutter1Right, model, camera);
+
+
+
 
 //        model = glm::translate(modelBase, glm::vec3(0.0, 20.0, -0.0));
 //        this->draw(VAOCutter1Right, textureCutter1Right, model, camera);
@@ -407,6 +418,8 @@ private:
                 -15.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
                 -15.0f, -1.0f, -20.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
         };
+
+
         GLfloat street[] = {
                 // positions          // colors           // texture coords
                 25.0f, -1.0f, -0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
@@ -440,7 +453,7 @@ private:
               FileSystem::getPath(TEXTUREBACK).c_str(), "front");
 
         build(VAOTop, VAOTopBack, VBOTop, VBOTopBack, EBO, textureTop, top, sizeof(top),
-              FileSystem::getPath("src/3.model_loading/images/photo_2024-12-04_10-51-1ddd5.jpg").c_str(),
+              FileSystem::getPath("src/3.model_loading/images/top2.png").c_str(),
               FileSystem::getPath(TEXTUREBACK).c_str(), "front");
 
         build(VAOWallRight, VAOWallRightBack, VBOWallRight, VBOWallRightBack, EBO, textureWallRight, wallRight,
@@ -530,7 +543,7 @@ private:
         stbi_image_free(data);
     }
 
-    void setStore1() {
+    void setCutterAndFloor() {
         GLfloat wallRight[] = {
                 // positions          // colors           // texture coords
                 4.0f, 3.0f, -8.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
@@ -538,10 +551,33 @@ private:
                 4.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
                 4.0f, 3.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
         };
+        GLfloat floor1[] = {
+                // positions          // colors           // texture coords
+                15.0f, 10.0f, -15.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                15.0f, 10.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                -15.0f, 10.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                -15.0f, 10.0f, -15.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+        };
+        GLfloat floor2[] = {
+                // positions          // colors           // texture coords
+                15.0f, 5.0f, -15.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                15.0f, 5.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                -15.0f, 5.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                -15.0f, 5.0f, -15.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+        };
+
 
         setStreet(VAOCutter1Right, VBOCutter1Right, EBO, textureCutter1Right, wallRight,
                   sizeof(wallRight),
                   FileSystem::getPath("resources/textures/wooden_door.bmp").c_str());
+
+        setStreet(VAOFloor1, VBOFloor1, EBO, textureFloor1, floor1,
+                  sizeof(floor1),
+                  FileSystem::getPath("resources/textures/Wood smg.bmp").c_str());
+
+        setStreet(VAOFloor2, VBOFloor2, EBO, textureFloor2, floor2,
+                  sizeof(floor2),
+                  FileSystem::getPath("resources/textures/Wood smg.bmp").c_str());
 
 
     }

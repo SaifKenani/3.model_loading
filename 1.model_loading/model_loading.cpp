@@ -89,7 +89,7 @@ int main() {
     Shader ourShader("1.model_loading.vs", "1.model_loading.fs");
     // load models
     // -----------
-    Model ourModel(FileSystem::getPath("resources/objects/cyborg/cyborg.obj"));
+//    Model ourModel(FileSystem::getPath("resources/objects/dinner_table/scene.gltf"));
     GLfloat vertices[] =
             { //     COORDINATES     /        COLORS      /   TexCoord  //
                     -0.9f, 0.3f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, // Lower left corner
@@ -136,7 +136,7 @@ int main() {
         model = glm::mat4(1.0f);
         model = glm::translate(model,
                                glm::vec3(cameraFrontOffset.x, cameraFrontOffset.y - 0.7, cameraFrontOffset.z + 0.1));
-        model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
+        model = glm::scale(model, glm::vec3(0.0005f, 0.0005f, 0.0005f));
         model = glm::rotate(model, glm::radians(degree), glm::vec3(0.0f, 1.0f, 0.0f));
         ourShader.setMat4("model", model);
 //        ourModel.Draw(ourShader);
@@ -164,7 +164,6 @@ int main() {
             Mall.drawDoor(camera, model);
             glDisable(GL_BLEND);
 
-            Mall.drawStreet(camera, model);
 
         }
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
