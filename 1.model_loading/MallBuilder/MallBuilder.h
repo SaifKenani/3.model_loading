@@ -228,7 +228,7 @@ public:
 
     void DrowInterface(Camera camera, glm::mat4 modelBase) {
 
-
+        drawCutter(camera, modelBase);
         this->draw(VAORight, textureRight, modelBase, camera);
         this->draw(VAORightBack, textureBack, modelBase, camera);
 
@@ -258,35 +258,33 @@ public:
         this->draw(VAODownBack, textureBack, modelBase, camera);
 
 
-        this->draw(VAODoor, textureDoor, modelBase, camera);
-        this->draw(VAODoorBack, textureBack, modelBase, camera);
-        glm::mat4 model=modelBase;
-        model = glm::translate(model, glm::vec3(-3.37, 0.0, 0.0));
-        this->draw(VAODoor, textureDoor, model, camera);
-        this->draw(VAODoorBack, textureBack, model, camera);
+
 
 //        this->draw(VAODownBack, textureBack, modelBase, camera);
 
     }
 
     void drawStreet(Camera camera, glm::mat4 modelBase) {
-        glm::mat4 model = modelBase;
-        this->draw(VAOStreet, textureStreet, modelBase, camera);
-        model = glm::translate(modelBase, glm::vec3(0.0, 20.0, -0.0));
+        glm::mat4 modelHelper = glm::mat4(1.0);
+        modelHelper = glm::rotate(modelHelper, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+        modelHelper = glm::translate(modelHelper, glm::vec3(0.0, 16.6, 3.3));
+
+        glm::mat4 model = modelHelper * modelBase;
         this->draw(VAOStreet, textureStreet, model, camera);
-        model = modelBase;
-        model = glm::translate(modelBase, glm::vec3(0.0, 6.67, -0.0));
+        model = glm::translate(model, glm::vec3(0.0, 20.0, -0.0));
+        this->draw(VAOStreet, textureStreet, model, camera);
+        model = glm::translate(model, glm::vec3(0.0, -13.33, -0.0));
         this->draw(VAOGrass, textureGrass, model, camera);
 
     }
 
     void drawCutter(Camera camera, glm::mat4 modelBase) {
         glm::mat4 model = modelBase;
-        model = glm::translate(modelBase, glm::vec3(-10.0, 0.0, 0.0));
+        model = glm::translate(modelBase, glm::vec3(-2.0, 0.0, 0.0));
 
         this->draw(VAOCutter1Right, textureCutter1Right, model, camera);
 
-        model = glm::translate(modelBase, glm::vec3(-17.0, 0.0, 0.0));
+        model = glm::translate(modelBase, glm::vec3(-26.0, 0.0, 0.0));
         this->draw(VAOCutter1Right, textureCutter1Right, model, camera);
 
 //        model = glm::translate(modelBase, glm::vec3(0.0, 20.0, -0.0));
@@ -296,108 +294,132 @@ public:
 //        this->draw(VAOGrass, textureGrass, model, camera);
 
     }
+
+    void drawDoor(Camera camera, glm::mat4 modelBase) {
+        glm::mat4 model = modelBase;
+
+
+        if (-7 < camera.Position.x && camera.Position.x < 3 && -2.6 < camera.Position.y && camera.Position.y < 3.6 &&
+            -7.5 < camera.Position.z && camera.Position.z < 10) {
+            model = glm::translate(model, glm::vec3(5.0f, 0.0f, +5.0f));  // نقل إلى الطرف الأيسر
+            model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));  // التدوير حول المحور Y
+            this->draw(VAODoor, textureDoor, model, camera);
+
+        }
+
+        this->draw(VAODoor, textureDoor, model, camera);
+
+    }
+
+//        model = modelBase;
+//        model = glm::translate(model, glm::vec3(-5.0f, 0.0f, 0.0f));  // نقل إلى الطرف الأيسر
+//        model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));  // التدوير حول المحور Y
+//
+//        this->draw(VAODoor, textureDoor, model, camera);
+
+
+
 private:
     void setVAO() {
         GLfloat right[] = {
                 // positions          // colors           // texture coords
-                8.0f, 4.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
-                8.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
-                1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
-                1.0f, 4.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+                15.0f, 8.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                15.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                1.5f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                1.5f, 8.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
         };
 
 
         GLfloat left[] = {
                 // positions          // colors           // texture coords
-                -1.0f, 4.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
-                -1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
-                -8.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
-                -8.0f, 4.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+                -1.5f, 8.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                -1.5f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                -15.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                -15.0f, 8.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
         };
 
 
         GLfloat center[] = {
                 // positions          // colors           // texture coords
-                1.0f, 4.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
-                1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
-                -1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
-                -1.0f, 4.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+                1.5f, 8.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                1.5f, 2.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                -1.5f, 2.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                -1.5f, 8.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
         };
 
 
         GLfloat door[] = {
                 // positions          // colors           // texture coords
-                1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
-                1.0f, -1.f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
-                -0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
-                -0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+                1.5f, 2.0f, -0.01f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                1.5f, -1.f, -0.01f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                -1.5f, -1.0f, -0.01f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                -1.5f, 2.0f, -0.01f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
         };
-
 
 
         GLfloat top[] = {
                 // positions          // colors           // texture coords
-                8.0f, 15.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
-                8.0f, 4.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
-                -8.0f, 4.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
-                -8.0f, 15.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+                15.0f, 15.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                15.0f, 8.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                -15.0f, 8.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                -15.0f, 15.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
         };
 
 
         GLfloat wallRight[] = {
                 // positions          // colors           // texture coords
-                8.0f, 15.0f, -20.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
-                8.0f, -1.0f, -20.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
-                8.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
-                8.0f, 15.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+                15.0f, 15.0f, -20.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                15.0f, -1.0f, -20.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                15.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                15.0f, 15.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
         };
 
 
         GLfloat wallLeft[] = {
                 // positions          // colors           // texture coords
-                -8.0f, 15.0f, -20.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
-                -8.0f, -1.0f, -20.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
-                -8.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
-                -8.0f, 15.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+                -15.0f, 15.0f, -20.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                -15.0f, -1.0f, -20.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                -15.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                -15.0f, 15.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
         };
 
 
         GLfloat back[] = {
                 // positions          // colors           // texture coords
-                8.0f, 15.0f, -20.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
-                8.0f, -1.0f, -20.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
-                -8.0f, -1.0f, -20.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
-                -8.0f, 15.0f, -20.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+                15.0f, 15.0f, -20.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                15.0f, -1.0f, -20.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                -15.0f, -1.0f, -20.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                -15.0f, 15.0f, -20.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
         };
 
         GLfloat up[] = {
                 // positions          // colors           // texture coords
-                8.0f, 15.0f, -20.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
-                8.0f, 15.0f, -0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
-                -8.0f, 15.0f, -0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
-                -8.0f, 15.0f, -20.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+                15.0f, 15.0f, -20.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                15.0f, 15.0f, -0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                -15.0f, 15.0f, -0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                -15.0f, 15.0f, -20.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
         };
 
         GLfloat down[] = {
                 // positions          // colors           // texture coords
-                8.0f, -1.0f, -20.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
-                8.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
-                -8.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
-                -8.0f, -1.0f, -20.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+                15.0f, -1.0f, -20.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                15.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                -15.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                -15.0f, -1.0f, -20.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
         };
         GLfloat street[] = {
                 // positions          // colors           // texture coords
-                15.0f, -1.0f, -0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
-                15.0f, -5.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
-                -20.0f, -5.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
-                -20.0f, -1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+                25.0f, -1.0f, -0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                25.0f, -5.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                -35.0f, -5.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                -35.0f, -1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
         };
         GLfloat grass[] = {
                 // positions          // colors           // texture coords
-                15.0f, -1.0f, -0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
-                15.0f, -3.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
-                -20.0f, -3.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
-                -20.0f, -1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+                25.0f, -1.0f, -0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                25.0f, -3.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                -35.0f, -3.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                -35.0f, -1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
         };
 
 
@@ -414,7 +436,7 @@ private:
               FileSystem::getPath(TEXTUREBACK).c_str(), "front");
 
         build(VAODoor, VAODoorBack, VBODoor, VBODoorBack, EBO, textureDoor, door, sizeof(top),
-              FileSystem::getPath("src/3.model_loading/images/photo_2024-12-04_10-51-1ddd5.jpg").c_str(),
+              FileSystem::getPath("src/3.model_loading/images/Стекло для дверей межкомнатных — Югрос.jpeg").c_str(),
               FileSystem::getPath(TEXTUREBACK).c_str(), "front");
 
         build(VAOTop, VAOTopBack, VBOTop, VBOTopBack, EBO, textureTop, top, sizeof(top),

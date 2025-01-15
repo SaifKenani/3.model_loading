@@ -83,7 +83,7 @@ int main() {
     // configure global opengl state
     // -----------------------------
     glEnable(GL_DEPTH_TEST);
-
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     // build and compile shaders
     // -------------------------
     Shader ourShader("1.model_loading.vs", "1.model_loading.fs");
@@ -125,7 +125,8 @@ int main() {
         ourShader.use();
 
         // view/projection transformations
-        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float) SCR_WIDTH / (float) SCR_HEIGHT, 0.1f,100.0f);
+        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float) SCR_WIDTH / (float) SCR_HEIGHT, 0.1f,
+                                                100.0f);
         glm::mat4 view = camera.GetViewMatrix();
         ourShader.setMat4("projection", projection);
         ourShader.setMat4("view", view);
@@ -152,19 +153,19 @@ int main() {
         model = glm::mat4(1.0f);
 //        model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 
-    Mall.DrowInterface(camera, model);
-        model = glm::mat4(1.0f);
-//        model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-
-        Mall.drawCutter(camera, model);
+        Mall.DrowInterface(camera, model);
 
 
         {
             model = glm::mat4(1.0f);
-            model = glm::rotate(model, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-            model = glm::translate(model, glm::vec3(0.0, 16.6, 3.3));
+            //    model = glm::translate(model, glm::vec3(0.0, 3.3, 5.3));
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            Mall.drawDoor(camera, model);
+            glDisable(GL_BLEND);
 
             Mall.drawStreet(camera, model);
+
         }
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
