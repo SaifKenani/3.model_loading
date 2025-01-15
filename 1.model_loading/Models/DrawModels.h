@@ -44,10 +44,9 @@ public:
         Table.Draw(shader);
 
 
-
     }
 
-    DrawModels() : Table(FileSystem::getPath("resources/objects/simple_dining_table/scene.gltf")),
+    DrawModels() : Table(FileSystem::getPath("src/3.model_loading/models/simple_dining_table/scene.gltf")),
                    shader("1.model_loading.vs", "1.model_loading.fs") {
 
     }
