@@ -13,6 +13,8 @@
 #include "learnopengl/filesystem.h"
 #include "learnopengl/camera.h"
 #include "iostream"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 using namespace std;
 
@@ -57,12 +59,20 @@ class MallBuilder {
     GLuint VAOFloor1, VBOFloor1, textureFloor1;
     GLuint VAOFloor2, VBOFloor2, textureFloor2;
 
-    GLuint VAOBannerRestaurant, VAOBannerRestaurantBack, VBOBannerRestaurant, VBOBannerRestaurantBack, textureBannerRestaurant, textureBannerRestaurantBack;
-    GLuint VAOBannerClothes, VBOBannerClothes, textureBannerClothes, VAOBannerClothesBack, VBOBannerClothesBack, textureBannerClothesBack;
-    GLuint VAOBannerRestaurantSide, VAOBannerRestaurantBackSide, VBOBannerRestaurantSide, VBOBannerRestaurantBackSide, textureBannerRestaurantSide, textureBannerRestaurantBackSide;
-    GLuint VAOBannerClothesSide, VBOBannerClothesSide, textureBannerClothesSide, VAOBannerClothesBackSide, VBOBannerClothesBackSide, textureBannerClothesBackSide;
 
+
+    // Restaurant
+    GLuint VAOBannerRestaurant, VAOBannerRestaurantBack, VBOBannerRestaurant, VBOBannerRestaurantBack, textureBannerRestaurant, textureBannerRestaurantBack;
+    GLuint VAOBannerRestaurantSide, VAOBannerRestaurantBackSide, VBOBannerRestaurantSide, VBOBannerRestaurantBackSide, textureBannerRestaurantSide, textureBannerRestaurantBackSide;
     GLuint VAOShawarma, VBOShawarma, EBOShawarma, textureShawarma;
+    GLuint VAOInterfaceRestaurant, VAOInterfaceRestaurantBack, VBOInterfaceRestaurant, VBOInterfaceRestaurantBack, textureInterfaceRestaurant, textureInterfaceRestaurantBack;
+    GLuint VAOInterfaceCompleteRestaurant, VAOInterfaceCompleteRestaurantBack, VBOInterfaceCompleteRestaurant, VBOInterfaceCompleteRestaurantBack, textureInterfaceCompleteRestaurant, textureInterfaceCompleteRestaurantBack;
+
+
+
+    GLuint VAOBannerClothes, VBOBannerClothes, textureBannerClothes, VAOBannerClothesBack, VBOBannerClothesBack, textureBannerClothesBack;
+
+    GLuint VAOBannerClothesSide, VBOBannerClothesSide, textureBannerClothesSide, VAOBannerClothesBackSide, VBOBannerClothesBackSide, textureBannerClothesBackSide;
 
 
     constexpr static const unsigned int indices[6] = {
@@ -79,6 +89,7 @@ public:
         setCutterAndFloor();
         banner();
         setShawarma();
+        setTableForChef();
     }
 
 
@@ -220,13 +231,39 @@ public:
 
     }
 
+    void buildTexture(GLuint &texture, const char *image) {
+
+        glGenTextures(1, &texture);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        // set the texture wrapping parameters
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        // set texture filtering parameters
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        int width, height, nrChannels;
+        stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
+        unsigned char *data = stbi_load(
+                image, &width,
+                &height, &nrChannels, 0);
+        if (data) {
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+            glGenerateMipmap(GL_TEXTURE_2D);
+        } else {
+            std::cout << "Failed to load texture" << std::endl;
+        }
+        stbi_image_free(data);
+    }
+
     void draw(GLuint VAO, GLuint texture, glm::mat4 modelBase, Camera camera) {
 
 
         ourShader.use();
         ourShader.setInt("texture", 0);
 
-        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float) SCR_WIDTH / (float) SCR_HEIGHT, 0.1f, 100.0f);
+        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float) SCR_WIDTH / (float) SCR_HEIGHT, 0.1f,
+                                                100.0f);
         glm::mat4 view = camera.GetViewMatrix();
         ourShader.use();
 
@@ -317,6 +354,44 @@ public:
         model = glm::translate(modelBase, glm::vec3(-26.0, 0.0, 0.0));
         this->draw(VAOCutter1Right, textureCutter1Right, model, camera);
 
+        model = modelBase;
+        this->draw(VAOInterfaceRestaurant, textureInterfaceRestaurant, model, camera);
+
+        this->draw(VAOInterfaceCompleteRestaurant, textureInterfaceCompleteRestaurant, model, camera);
+
+        model = modelBase;
+        model = glm::translate(model, glm::vec3(61.3, 0.0, 0.0));
+        this->draw(VAOInterfaceRestaurant, textureInterfaceRestaurant, model, camera);
+
+        model = glm::translate(model, glm::vec3(1.2, 0.0, 0.0));
+        this->draw(VAOInterfaceCompleteRestaurant, textureInterfaceCompleteRestaurant, model, camera);
+
+
+
+        // To draw shelf left
+        model = modelBase;
+        model = glm::translate(model, glm::vec3(61.3, 0.0, 0.0));
+        model = glm::translate(model, glm::vec3(1.2, 0.0, 0.0));
+        model = glm::rotate(model, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+        model = glm::translate(model, glm::vec3(0.0, -14.0, 27.0));
+        this->draw(VAOInterfaceCompleteRestaurant, textureInterfaceCompleteRestaurant, model, camera);
+
+        // To draw shelf right
+        model = modelBase;
+        model = glm::translate(model, glm::vec3(61.3, 0.0, 0.0));
+        model = glm::translate(model, glm::vec3(1.2, 0.0, 0.0));
+        model = glm::rotate(model, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+        model = glm::translate(model, glm::vec3(0.0, -14.0, 27.0));
+        model = glm::translate(model, glm::vec3(-34.5, 0.0, 0.0));
+
+        this->draw(VAOInterfaceCompleteRestaurant, textureInterfaceCompleteRestaurant, model, camera);
+
+        // To draw shelf front
+        model = modelBase;
+        model = glm::scale(model, glm::vec3(5.0,5.0,5.0));
+
+        this->draw(VAOInterfaceCompleteRestaurant, textureInterfaceCompleteRestaurant, model, camera);
+
 
 
 
@@ -385,12 +460,14 @@ public:
 //        this->draw(VAODoorLeftBack, textureDoorLeft, model, camera);
 
     }
+
     void drawShwarma(Camera camera, glm::mat4 modelBase) {
 
         ourShader.use();
         ourShader.setInt("texture", 0);
 
-        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float) SCR_WIDTH / (float) SCR_HEIGHT, 0.1f, 100.0f);
+        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float) SCR_WIDTH / (float) SCR_HEIGHT, 0.1f,
+                                                100.0f);
         glm::mat4 view = camera.GetViewMatrix();
         ourShader.use();
 
@@ -403,14 +480,6 @@ public:
         glBindVertexArray(VAOShawarma);
         glDrawElements(GL_TRIANGLES, 6 * 36, GL_UNSIGNED_INT, 0);
     }
-
-//        model = modelBase;
-//        model = glm::translate(model, glm::vec3(-5.0f, 0.0f, 0.0f));  // نقل إلى الطرف الأيسر
-//        model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));  // التدوير حول المحور Y
-//
-//        this->draw(VAODoor, textureDoor, model, camera);
-
-
 
 private:
     void setVAO() {
@@ -683,7 +752,120 @@ private:
 
     }
 
-    void setSection() {
+    void setTableForChef() {
+
+        GLfloat Interface[] = {
+                // positions          // colors           // texture coords
+                15.0f, 3.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                15.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                3.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                3.0f, 3.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+        };
+
+        GLfloat front[] = {
+                // positions          // colors           // texture coords
+                -15.0f, 3.0f, -8.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                -15.0f, -1.0f, -8.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                -7.0f, -1.0f, -8.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                -7.0f, 3.0f, -8.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+        };
+        GLfloat frontComplete[] = {
+                // positions          // colors           // texture coords
+                -5.0f, 3.0f, -8.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                -5.0f, -1.0f, -8.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                -3.77f, -1.0f, -8.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                -3.77f, 3.0f, -8.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+        };
+        setStreet(VAOInterfaceRestaurant, VBOInterfaceRestaurant, EBO, textureInterfaceRestaurant, front,
+                  sizeof(front),
+                  FileSystem::getPath("src/3.model_loading/images/clothes2.png").c_str());
+
+        setStreet(VAOInterfaceCompleteRestaurant, VBOInterfaceCompleteRestaurant, EBO, textureInterfaceCompleteRestaurant, frontComplete,
+                  sizeof(frontComplete),
+                  FileSystem::getPath("src/3.model_loading/images/clothes2.png").c_str());
+
+
+
+
+
+
+
+        GLfloat center[] = {
+                // positions          // colors           // texture coords
+                3.0f, 15.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                3.0f, 2.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                -3.0f, 2.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                -3.0f, 15.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+        };
+
+
+        GLfloat doorRight[] = {
+                // positions          // colors           // texture coords
+                3.0f, 2.0f, -0.01f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                3.0f, -1.f, -0.01f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                -0.0f, -1.0f, -0.01f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                -0.0f, 2.0f, -0.01f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+        };
+
+        GLfloat doorLeft[] = {
+                // positions          // colors           // texture coords
+                0.0f, 2.0f, -0.01f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                0.0f, -1.f, -0.01f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                -3.0f, -1.0f, -0.01f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                -3.0f, 2.0f, -0.01f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+        };
+
+
+        GLfloat top[] = {
+                // positions          // colors           // texture coords
+                15.0f, 15.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                15.0f, 8.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                -15.0f, 8.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                -15.0f, 15.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+        };
+
+
+        GLfloat wallRight[] = {
+                // positions          // colors           // texture coords
+                15.0f, 15.0f, -20.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                15.0f, -1.0f, -20.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                15.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                15.0f, 15.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+        };
+
+
+        GLfloat wallLeft[] = {
+                // positions          // colors           // texture coords
+                -15.0f, 15.0f, -20.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                -15.0f, -1.0f, -20.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                -15.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                -15.0f, 15.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+        };
+
+
+        GLfloat back[] = {
+                // positions          // colors           // texture coords
+                15.0f, 15.0f, -20.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                15.0f, -1.0f, -20.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                -15.0f, -1.0f, -20.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                -15.0f, 15.0f, -20.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+        };
+
+        GLfloat up[] = {
+                // positions          // colors           // texture coords
+                15.0f, 15.0f, -20.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                15.0f, 15.0f, -0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                -15.0f, 15.0f, -0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                -15.0f, 15.0f, -20.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+        };
+
+        GLfloat down[] = {
+                // positions          // colors           // texture coords
+                15.0f, -1.0f, -20.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                15.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                -15.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                -15.0f, -1.0f, -20.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+        };
 
     }
 
@@ -751,7 +933,7 @@ private:
         generateConeMesh(1.0f, 0.2f, 2.0f);
     }
 
-    void generateConeMesh( float topRadius, float bottomRadius,
+    void generateConeMesh(float topRadius, float bottomRadius,
                           float height) {
         const int SEGMENTS = 36;
         const int VERTEX_COUNT = (SEGMENTS + 1) * 2; // عدد الرؤوس
