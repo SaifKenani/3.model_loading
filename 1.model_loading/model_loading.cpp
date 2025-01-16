@@ -11,12 +11,23 @@
 #include <learnopengl/camera.h>
 #include <learnopengl/model.h>
 #include <iostream>
-#include "VAO.h"
-#include "VBO.h"
-#include "EBO.h"
 #include "MallBuilder/MallBuilder.h"
 #include "SkyBox/SkyBox.h"
 #include "Models/DrawModels.h"
+
+//  For Video
+//#include <libavformat/avformat.h>
+//#include <libavcodec/avcodec.h>
+//#include <libswscale/swscale.h>
+//#include <libavutil/imgutils.h>
+
+// For audio
+//#include <AL/al.h>
+//#include <AL/alc.h>
+//#include <AL/alut.h>
+//#include <iostream>
+//#include <fstream>
+
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 
@@ -27,8 +38,8 @@ void scroll_callback(GLFWwindow *window, double xoffset, double yoffset);
 void processInput(GLFWwindow *window);
 
 // settings
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
+const unsigned int SCR_WIDTH = 1920;
+const unsigned int SCR_HEIGHT = 1080;
 
 // camera
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
@@ -80,7 +91,6 @@ int main() {
     }
 
     // tell stb_image.h to flip loaded texture's on the y-axis (before loading model).
-    stbi_set_flip_vertically_on_load(true);
 
     // configure global opengl state
     // -----------------------------
@@ -92,8 +102,8 @@ int main() {
     // load models
     // -----------
     Model ourModel(FileSystem::getPath("resources/objects/dinner_table/scene.gltf"));
-    Model Table(FileSystem::getPath("resources/objects/simple_dining_table/scene.gltf"));
-DrawModels Models;
+    //Model Table(FileSystem::getPath("resources/objects/simple_dining_table/scene.gltf"));
+    DrawModels Models;
     GLfloat vertices[] =
             { //     COORDINATES     /        COLORS      /   TexCoord  //
                     -0.9f, 0.3f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, // Lower left corner
@@ -147,7 +157,7 @@ DrawModels Models;
 //        ourModel.Draw(ourShader);
         model = glm::mat4(1.0f);
 
-        Models.drawTable(camera,model);
+        Models.drawTable(camera, model);
 
 
         model = glm::mat4(1.0f);
@@ -163,6 +173,13 @@ DrawModels Models;
 //        model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 
         Mall.DrowInterface(camera, model);
+
+        //SHAWARMA
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(2.0, 3.3, 5.3));
+        model = glm::scale(model, glm::vec3(1.0f,1.0f, 1.0f));
+
+        Mall.drawShwarma(camera, model);
 
 
         {
