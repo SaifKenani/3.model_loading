@@ -25,21 +25,21 @@ public:
 
 
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(-45.0, -1.0, -5.5));
+        model = glm::translate(model, glm::vec3(-45.0, -0.0, -5.5));
         model = glm::scale(model, glm::vec3(5.0f, 5.0, 5.0));
         model = model * baseModel;
         shader.setMat4("model", model);
         Table.Draw(shader);
 
         model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(-20.0, -1.0, -5.5));
+        model = glm::translate(model, glm::vec3(-20.0, -0.0, -5.5));
         model = glm::scale(model, glm::vec3(5.0f, 5.0, 5.0));
         model = model * baseModel;
         shader.setMat4("model", model);
         Table.Draw(shader);
 
         model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(-32.5, -1.0, -5.5));
+        model = glm::translate(model, glm::vec3(-32.5, -0.0, -5.5));
         model = glm::scale(model, glm::vec3(5.0f, 5.0, 5.0));
         model = model * baseModel;
         shader.setMat4("model", model);

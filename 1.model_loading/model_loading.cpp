@@ -14,6 +14,7 @@
 #include "MallBuilder/MallBuilder.h"
 #include "SkyBox/SkyBox.h"
 #include "Models/DrawModels.h"
+#include "Floor2/Floor2.h"
 
 //  For Video
 //#include <libavformat/avformat.h>
@@ -119,6 +120,7 @@ int main() {
     // render loop
     // -----------
     MallBuilder Mall;
+    Floor2 Floor2;
     SkyBox SkyBox;
     while (!glfwWindowShouldClose(window)) {
         // per-frame time logic
@@ -177,10 +179,9 @@ int main() {
         //SHAWARMA
         model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(2.0, 3.3, 5.3));
-        model = glm::scale(model, glm::vec3(1.0f,1.0f, 1.0f));
+        model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
 
         Mall.drawShwarma(camera, model);
-
 
         {
             model = glm::mat4(1.0f);
@@ -188,6 +189,13 @@ int main() {
             glEnable(GL_BLEND);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             Mall.drawDoor(camera, model);
+            glDisable(GL_BLEND);
+
+
+            model = glm::mat4(1.0);
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            Floor2.drawWithTransparency(camera, model);
             glDisable(GL_BLEND);
 
 
