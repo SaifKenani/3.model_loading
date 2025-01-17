@@ -24,7 +24,16 @@ class Floor2 {
 
     GLuint VAOSeparator1, textureSeparator1;
     GLuint VAOSeparator2, textureSeparator2;
+    GLuint VAOSeparator2Complete, textureSeparator2Complete1, textureSeparator2Complete2;
 
+
+    GLuint VAOBanner, textureBanner1, textureBanner2;
+
+
+    // for library
+    GLuint VAOLibrary1, textureLibrary1; // back
+    GLuint VAOLibrary2, textureLibrary2; //vertical
+    GLuint VAOLibrary3, textureLibrary3; //horizon
 
 
 public:
@@ -37,26 +46,105 @@ public:
     Floor2() : ourShader(FileSystem::getPath("src/1.getting_started/7.4.camera_class/7.4.camera.vs").c_str(),
                          FileSystem::getPath("src/1.getting_started/7.4.camera_class/7.4.camera.fs").c_str()) {
         setSeparator();
+        setBanner();
+        setLibrary();
     }
 
-    void drawWithTransparency(Camera camera,glm::mat4 baseModel){
-        // Tow Separator
-        glm::mat4 model=baseModel;
-        this->draw(camera,model,VAOSeparator1,textureSeparator1);
-        model = glm::translate(model, glm::vec3(+60.0, 0.0, 0.0));
-        this->draw(camera,model,VAOSeparator1,textureSeparator1);
+    void drawWithOutTransparency(Camera camera, glm::mat4 baseModel) {
 
-         model=baseModel;
-        this->draw(camera,model,VAOSeparator2,textureSeparator2);
+        glm::mat4 model = baseModel;
+
+        // tow banner
+        model = baseModel;
+        this->draw(camera, model, VAOBanner, textureBanner1);
         model = glm::translate(model, glm::vec3(+20.0, 0.0, 0.0));
-        this->draw(camera,model,VAOSeparator2,textureSeparator2);
+        this->draw(camera, model, VAOBanner, textureBanner2);
 
-        
+        //Library
+        model = baseModel;
+        this->draw(camera, model, VAOLibrary1, textureLibrary1);
 
+        model = baseModel;
+        this->draw(camera, model, VAOLibrary2, textureLibrary2);
+        model = glm::translate(model, glm::vec3(-33.3, 0.0, 0.0));
+        this->draw(camera, model, VAOLibrary2, textureLibrary2);
+
+
+        model = baseModel;
+        this->draw(camera, model, VAOLibrary3, textureLibrary3);
+        model = glm::translate(model, glm::vec3(0.0, 3.0, 0.0));
+        this->draw(camera, model, VAOLibrary3, textureLibrary3);
+        model = glm::translate(model, glm::vec3(00.0, 3.0, 0.0));
+        this->draw(camera, model, VAOLibrary3, textureLibrary3);
+        model = glm::translate(model, glm::vec3(00.0, 3.0, 0.0));
+        this->draw(camera, model, VAOLibrary3, textureLibrary3);
+        model = glm::translate(model, glm::vec3(00.0, 4.3, 0.0));
+        this->draw(camera, model, VAOLibrary3, textureLibrary3);
+
+
+        model = baseModel;
+        model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        model = glm::translate(model, glm::vec3(+50.0, 0.0, -45.0));
+        this->draw(camera, model, VAOLibrary1, textureLibrary1);
+
+
+        model = baseModel;
+        model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        model = glm::translate(model, glm::vec3(50.0, 0.0, -41.7));
+        this->draw(camera, model, VAOLibrary2, textureLibrary2);
+
+
+        model = baseModel;
+        model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        model = glm::translate(model, glm::vec3(50.0, 0.001, -41.7));
+        this->draw(camera, model, VAOLibrary3, textureLibrary3);
+        model = glm::translate(model, glm::vec3(00.0, 3.0, 0.0));
+        this->draw(camera, model, VAOLibrary3, textureLibrary3);
+        model = glm::translate(model, glm::vec3(00.0, 3.0, 0.0));
+        this->draw(camera, model, VAOLibrary3, textureLibrary3);
+        model = glm::translate(model, glm::vec3(00.0, 3.0, 0.0));
+        this->draw(camera, model, VAOLibrary3, textureLibrary3);
+        model = glm::translate(model, glm::vec3(00.0, 4.3, 0.0));
+        this->draw(camera, model, VAOLibrary3, textureLibrary3);
 
 
     }
+
+    void drawWithTransparency(Camera camera, glm::mat4 baseModel) {
+        // Tow Separator
+        glm::mat4 model = baseModel;
+        this->draw(camera, model, VAOSeparator1, textureSeparator1);
+        model = glm::translate(model, glm::vec3(+60.0, 0.0, 0.0));
+        this->draw(camera, model, VAOSeparator1, textureSeparator1);
+
+        model = baseModel;
+        this->draw(camera, model, VAOSeparator2, textureSeparator2);
+        model = glm::translate(model, glm::vec3(+20.0, 0.0, 0.0));
+        this->draw(camera, model, VAOSeparator2, textureSeparator2);
+        model = baseModel;
+        this->draw(camera, model, VAOSeparator2Complete, textureSeparator2Complete1);
+        model = glm::translate(model, glm::vec3(+20.0, 0.0, 0.0));
+        this->draw(camera, model, VAOSeparator2Complete, textureSeparator2Complete2);
+
+
+    }
+
 private:
+
+    void setBanner() {
+
+        GLfloat banner[] = {
+                // positions          // colors           // texture coords
+                -3.0f, 10.0f, -12.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                -3.0f, 8.0f, -12.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                -3.0f, 8.0f, -8.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                -3.0f, 10.0f, -8.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+        };
+        setVAO(VAOBanner, banner, sizeof(banner));
+        setTexture(textureBanner1, FileSystem::getPath("src/3.model_loading/images/blur2.png").c_str());
+
+
+    }
 
     void setSeparator() {
 
@@ -68,7 +156,7 @@ private:
                 -3.0f, 10.0f, -12.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
         };
         setVAO(VAOSeparator1, separator1, sizeof(separator1));
-        setTexture(textureSeparator1,FileSystem::getPath("src/3.model_loading/images/blur2.png").c_str());
+        setTexture(textureSeparator1, FileSystem::getPath("src/3.model_loading/images/blur2.png").c_str());
 
         GLfloat separator2[] = {
                 // positions          // colors           // texture coords
@@ -78,7 +166,57 @@ private:
                 -3.0f, 10.0f, -0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
         };
         setVAO(VAOSeparator2, separator2, sizeof(separator2));
-        setTexture(textureSeparator2,FileSystem::getPath("src/3.model_loading/images/blur2.png").c_str());
+        setTexture(textureSeparator2, FileSystem::getPath("src/3.model_loading/images/blur2.png").c_str());
+
+
+        GLfloat separator2Complete[] = {
+                // positions          // colors           // texture coords
+                -3.0f, 8.0f, -12.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                -3.0f, 5.0f, -12.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                -3.0f, 5.0f, -10.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                -3.0f, 8.0f, -10.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+        };
+        setVAO(VAOSeparator2Complete, separator2Complete, sizeof(separator2Complete));
+        setTexture(textureSeparator2Complete1, FileSystem::getPath("src/3.model_loading/images/blur2.png").c_str());
+
+
+    }
+
+    void setLibrary() {
+
+        GLfloat back[] = {
+                // positions          // colors           // texture coords
+                -14.0f, 10.0f, -0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                -14.0f, 5.0f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                -4.0f, 5.0f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                -4.0f, 10.0f, -0.5f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+        };
+
+        setVAO(VAOLibrary1, back, sizeof(back));
+        setTexture(textureLibrary1, FileSystem::getPath("src/3.model_loading/images/img.png").c_str());
+
+        GLfloat vertical[] = {
+                // positions          // colors           // texture coords
+                -4.0f, 10.0f, -1.5f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                -4.0f, 5.0f, -1.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+                -4.0f, 5.0f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                -4.0f, 10.0f, -0.5f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f  // top left
+        };
+
+        setVAO(VAOLibrary2, vertical, sizeof(vertical));
+        setTexture(textureLibrary2, FileSystem::getPath("src/3.model_loading/images/img.png").c_str());
+
+
+        GLfloat horizon[] = {
+                // positions          // colors           // texture coords
+                -14.0f, 6.0f, -1.5f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+                -4.0f, 6.0f, -1.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+                -4.0f, 6.0f, -0.5f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f,  // top left,
+                -14.0f, 6.0f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+        };
+
+        setVAO(VAOLibrary3, horizon, sizeof(horizon));
+        setTexture(textureLibrary3, FileSystem::getPath("src/3.model_loading/images/img.png").c_str());
 
 
     }

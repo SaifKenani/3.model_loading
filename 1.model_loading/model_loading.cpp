@@ -183,6 +183,9 @@ int main() {
 
         Mall.drawShwarma(camera, model);
 
+        model = glm::mat4(1.0f);
+        Floor2.drawWithOutTransparency(camera,model);
+
         {
             model = glm::mat4(1.0f);
             //    model = glm::translate(model, glm::vec3(0.0, 3.3, 5.3));
